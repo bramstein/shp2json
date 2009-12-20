@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>JavaScript & Canvas</title>
+		<style>
+			canvas {
+				/*border: 1px solid red;*/
+			}
+		</style>
+		<script>
+			function draw() {
+				var bounds = {
+						horizontal: [-180.00004106353606, 180.00000044181036],
+						vertical: [-89.99889902136007, 83.64512726514185]
+					},
+					c = document.getElementById('canvas'),
+					context = null,
+					width = 0,
+					height = 0,
+					scale = {
+						horizontal: 1,
+						vertical: 1
+					},
+					ratio = 1,
+					i = 0;
+
+				if (c.getContext && c.getContext('2d')) {
+					context = c.getContext('2d');
+
+					width = context.canvas.width;
+					height = context.canvas.height;
+
+					scale.horizontal = width / (bounds.horizontal[1] - bounds.horizontal[0]);
+					scale.vertical = height / (bounds.vertical[1] - bounds.vertical[0]);
+
+
+					ratio = (bounds.horizontal[1] - bounds.horizontal[0]) / (bounds.vertical[1] - bounds.vertical[0]);
+
+					console.log(scale);
+					console.log(ratio);
+
+					//context.globalCompositeOperation = 'xor';
+					context.scale(1, -1);
+					context.translate(0, -height);
+					context.save();
+					context.scale(scale.horizontal, scale.vertical);
+					context.translate(-bounds.horizontal[0], -bounds.vertical[0]);
+					context.fillStyle = '#47c2ff';
+					context.fillRect(bounds.horizontal[0], bounds.vertical[0], bounds.horizontal[1] - bounds.horizontal[0], bounds.vertical[1] - bounds.vertical[0]);
+					console.log(1 / scale.horizontal);
+					console.log(1 / scale.vertical);
+					context.lineWidth = (1 / scale.vertical) - 0.2;
+					//context.fillRect(-180, -90, 360, 89);
+					context.fillStyle = 'white';
+					data.forEach(function (element) {
+						var start = element.the_geom[0],
+							i = 1;
+						context.beginPath();
+						context.moveTo(start[0], start[1]);
+						for (; i < element.the_geom.length; i += 1) {
+							context.lineTo(element.the_geom[i][0], element.the_geom[i][1]);
+						}
+						context.closePath();
+						//context.stroke();
+						context.fill();
+						context.stroke();
+					});
+					context.restore();
+				}
+			}
+
+		</script>
+	</head>
+	<body onload="draw()">
+		<canvas id="canvas" width="400" height="200">
+		</canvas>
+		<script type="text/javascript" src="test.js"></script>
+	</body>
+</html>
+
+
+
+
