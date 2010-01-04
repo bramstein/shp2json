@@ -9,13 +9,39 @@
 			}
 		</style>
 		<script>
+		Math.degreesToRadians = function (degrees) {
+			return degrees * (Math.PI / 180);
+		};
+			var context = null;
+			var bounds = { horizontal: [-128, 128], vertical: [-128, 128] };
+			var radius = 40.74366543152521 * 1;
+		
+
+			function longToX(longitude) {
+				return radius * Math.degreesToRadians(longitude);
+			}
+
+			function latToY(latitude) {
+				if (latitude < -89) {
+					latitude = -89;
+				} else if (latitude > 89) {
+					latitude = 89;
+				}
+
+				var lat = Math.degreesToRadians(latitude);
+
+				return radius / 2 *  Math.log((1 + Math.sin(lat)) /  (1 - Math.sin(lat)));
+			}
+
+			function merc( a ) {
+				var x = a[0], y = a[1];
+
+				var tmp = [longToX(x), latToY(y)];
+				return tmp;
+			}
+
 			function draw() {
-				var bounds = {
-						horizontal: [-180.00004106353606, 180.00000044181036],
-						vertical: [-89.99889902136007, 83.64512726514185]
-					},
-					c = document.getElementById('canvas'),
-					context = null,
+				var c = document.getElementById('canvas'),
 					width = 0,
 					height = 0,
 					scale = {
@@ -37,35 +63,35 @@
 
 					ratio = (bounds.horizontal[1] - bounds.horizontal[0]) / (bounds.vertical[1] - bounds.vertical[0]);
 
-					console.log(scale);
-					console.log(ratio);
 
-					//context.globalCompositeOperation = 'xor';
 					context.scale(1, -1);
 					context.translate(0, -height);
 					context.save();
 					context.scale(scale.horizontal, scale.vertical);
 					context.translate(-bounds.horizontal[0], -bounds.vertical[0]);
+					context.strokeStyle = 'grey';
 					context.fillStyle = '#47c2ff';
 					context.fillRect(bounds.horizontal[0], bounds.vertical[0], bounds.horizontal[1] - bounds.horizontal[0], bounds.vertical[1] - bounds.vertical[0]);
-					console.log(1 / scale.horizontal);
-					console.log(1 / scale.vertical);
-					context.lineWidth = (1 / scale.vertical) - 0.2;
-					//context.fillRect(-180, -90, 360, 89);
+					context.lineWidth = (1 / scale.vertical) / 2;
 					context.fillStyle = 'white';
+
+
 					data.forEach(function (element) {
-						var start = element.the_geom[0],
-							i = 1;
+						var start = merc(element.the_geom[0]),
+							i = 1,
+							tmp;
 						context.beginPath();
 						context.moveTo(start[0], start[1]);
 						for (; i < element.the_geom.length; i += 1) {
-							context.lineTo(element.the_geom[i][0], element.the_geom[i][1]);
+							tmp = merc(element.the_geom[i]);
+							context.lineTo(tmp[0], tmp[1]);
 						}
 						context.closePath();
-						//context.stroke();
 						context.fill();
 						context.stroke();
 					});
+
+
 					context.restore();
 				}
 			}
@@ -73,7 +99,7 @@
 		</script>
 	</head>
 	<body onload="draw()">
-		<canvas id="canvas" width="400" height="200">
+		<canvas id="canvas" width="512" height="512">
 		</canvas>
 		<script type="text/javascript" src="test.js"></script>
 	</body>

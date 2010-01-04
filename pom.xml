@@ -19,13 +19,37 @@
     	<version>2.6.0</version>
     	<artifactId>gt-shapefile</artifactId>
     </dependency>
-    <!-- 
+ 
     <dependency>
+    <version>2.6.0</version>
+	<groupId>org.geotools</groupId>
+	<artifactId>gt-epsg-extension</artifactId>
+    </dependency>
+    
+        <dependency>
     <version>2.6.0</version>
 	<groupId>org.geotools</groupId>
 	<artifactId>gt-epsg-hsql</artifactId>
     </dependency>
     
+    <dependency>
+    <version>2.6.0</version>
+	<groupId>org.geotools</groupId>
+	<artifactId>gt-metadata</artifactId>
+    </dependency>
+    
+        <dependency>
+    <version>2.6.0</version>
+	<groupId>org.geotools</groupId>
+	<artifactId>gt-referencing</artifactId>
+    </dependency>
+    
+            <dependency>
+    <version>2.6.0</version>
+	<groupId>org.geotools</groupId>
+	<artifactId>gt-referencing3D</artifactId>
+    </dependency>
+<!--     
     <dependency>
     	<groupId>org.geotools</groupId>
     	<artifactId>gt-swing</artifactId>
